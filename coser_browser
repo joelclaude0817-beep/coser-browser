@@ -1,0 +1,49 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# CoSer Browser for Termux
+# Usage: coser youtube.com
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Banner
+echo -e "${GREEN}"
+echo "   ______          ______"
+echo "  / ____/___  ____/ / __ \\"
+echo " / /   / __ \/ __  / /_/ /"
+echo "/ /___/ /_/ / /_/ / ____/ "
+echo "\____/\____/\__,_/_/      "
+echo -e "${NC}"
+echo "CoSer Browser v1.0"
+echo "=================="
+
+# Check if URL is provided
+if [ -z "$1" ]; then
+    echo -e "${YELLOW}Usage: coser <website-url>${NC}"
+    echo -e "${YELLOW}Example: coser youtube.com${NC}"
+    echo -e "${YELLOW}Example: coser https://www.google.com${NC}"
+    exit 1
+fi
+
+# Process the URL
+URL="$1"
+
+# Add https:// if not present
+if [[ ! $URL =~ ^https?:// ]]; then
+    URL="https://$URL"
+fi
+
+echo -e "${BLUE}Opening: $URL${NC}"
+
+# Use Termux:API to open in default browser
+termux-open-url "$URL"
+
+# Optional: Log the browsing history
+HISTORY_FILE="$HOME/.coser_history"
+echo "$(date): $URL" >> "$HISTORY_FILE"
+
+echo -e "${GREEN}Website opened successfully!${NC}"
